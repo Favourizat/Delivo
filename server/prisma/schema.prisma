@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  driver    Driver?
+  orders    Order[]
+}
+
+model Driver {
+  id               String       @id @default(uuid())
+  userId           String       @unique
+  licenseNumber    String       @unique
+  status           DriverStatus @default(OFFLINE)
+  currentLatitude  Float?
+  currentLongitude Float?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now())
+  user             User         @relation(fields: [userId], references: [id])
+  orders           Order[]
+}
+
+model Address {
+  id               String   @id @default(uuid())
+  addressLine      String
+  city             String
+  state            String
+  latitude         Float?
+  longitude        Float?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+}
+
+model Order {
+  id                 String      @id @default(uuid())
+  orderReference     String      @unique
+  userId             String
+  pickupAddress    String
+  deliveryAddress  String
+  packageType        String
+  packageDescription String
+  packageWeight      Float?
+  deliveryFee        Decimal     @db.Decimal(10, 2)
+  status             OrderStatus @default(PENDING)
+  driverId           String?
+  scheduledAt        DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @default(now())
+  driver             Driver?     @relation(fields: [driverId], references: [id])
+  user               User        @relation(fields: [userId], references: [id])
+  payment            Payment?
+  trackingEvents TrackingEvent[]
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String        @unique
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentMethod PaymentMethod
+  paidAt        DateTime?
+  failedAt      DateTime?
+  order         Order         @relation(fields: [orderId], references: [id])
+}
+
+enum UserRole {
+  CUSTOMER
+  DRIVER
+  ADMIN
+}
+
+enum DriverStatus {
+  AVAILABLE
+  BUSY
+  OFFLINE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+}
+
+enum PaymentMethod {
+  CARD
+  TRANSFER
+}
+
+model TrackingEvent {
+  id  String  @id @default(uuid())
+  orderId   String
+  status    OrderStatus
+  message   String
+  location   String?
+  latitude   Float?
+  longitude  Float?
+  remarks     String?
+  createdAt  DateTime   @default(now())
+
+  order Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+}
