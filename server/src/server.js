@@ -1,63 +1,28 @@
 
-import express from "express";
 import { config } from "dotenv";
 import { connectDB, disconnectDB } from "./config/db.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import authRoutes from "./routes/authRoutes.js"
-import trackingRoutes from "./routes/trackingRoutes.js"
-import geocodingRoutes from "./routes/geocodingRoutes.js"
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import app from "./app.js";
 
 config();
-connectDB();
 
-const app = express();
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-}))
+const PORT = process.env.PORT || 5001;
 
-// Middleware
-app.use(express.json());
-app.use(cookieParser())
+const startServer = async () => {
+    await connectDB();
 
-// Routes
-app.use("/api/orders", orderRoutes);
-app.use("/api/auth", authRoutes)
-app.use("/api/tracking", trackingRoutes)
-app.use("/api/geocoding", geocodingRoutes)
-
-const PORT = 5001;
-
-const server = app.listen(PORT, () => {
-    console.log(`Server running on PORT ${PORT}`);
-});
-
-// Handle unhandled promise rejections (eg database connection errors)
-process.on("unhandledRejection", (err) => {
-    console.error("Unhandled Rejection:", err);
-
-    server.close(async () => {
-        await disconnectDB();
-        process.exit(1);
+    const server = app.listen(PORT, () => {
+        console.log(`Server running on PORT ${PORT}`);
     });
-});
 
-// Handle Uncaught Exceptions
-process.on("uncaughtException", async (err) => {
-    console.error("Uncaught Exception:", err);
-
-    await disconnectDB();
-    process.exit(1);
-});
-
-// Graceful Shutdown
-process.on("SIGTERM", async () => {
-    console.log("SIGTERM received, shutting down gracefully");
-
-    server.close(async () => {
-        await disconnectDB();
-        process.exit(0);
+    process.on("SIGTERM", async () => {
+        server.close(async () => {
+            await disconnectDB();
+            process.exit(0);
+        });
     });
+};
+
+startServer().catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exitCode = 1;
 });
