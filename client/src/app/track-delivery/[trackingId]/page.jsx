@@ -7,6 +7,7 @@ import { useState, useEffect } from "react"
 import { Package, ArrowLeft, CalendarDays, Clock, Copy, MapPin, MapPinned } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import API_URL from "@/lib/api"
 
 const TrackingMap = dynamic(() => import("../../components/TrackingMap"),
     { ssr: false }
@@ -39,7 +40,7 @@ export default function TrackingResults() {
                 setError("")
 
                 const response = await fetch(
-                    `http://localhost:5001/api/tracking/orders/${encodeURIComponent(trackingId)}/tracking`,
+                    `${API_URL}/api/tracking/orders/${encodeURIComponent(trackingId)}/tracking`,
                     {
                         method: "GET",
                         credentials: "include",

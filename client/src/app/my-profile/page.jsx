@@ -15,6 +15,7 @@ import {
 import { UserRound } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import API_URL from "@/lib/api"
 
 
 export default function MyProfilePage() {
@@ -32,7 +33,7 @@ export default function MyProfilePage() {
         const checkAuth = async () => {
             try {
                 const response = await fetch(
-                    "http://localhost:5001/api/auth/profile",
+                    `${API_URL}/api/auth/profile`,
                     {
                         credentials: "include",
                     }
@@ -64,7 +65,7 @@ export default function MyProfilePage() {
         const fetchOrders = async () => {
             try {
                 const response = await fetch(
-                    "http://localhost:5001/api/orders/my-orders",
+                    `${API_URL}/api/orders/my-orders`,
                     {
                         credentials: "include",
                     }

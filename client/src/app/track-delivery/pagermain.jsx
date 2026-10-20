@@ -6,6 +6,7 @@ import { useParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { Package, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+import API_URL from "@/lib/api"
 
 export default function TrackingResults() {
     const params = useParams()
@@ -22,7 +23,7 @@ export default function TrackingResults() {
                 setError("")
 
                 const response = await fetch(
-                    `http://localhost:5001/api/tracking/orders/${encodeURIComponent(trackingId)}/tracking`,
+                    `${API_URL}/api/tracking/orders/${encodeURIComponent(trackingId)}/tracking`,
                     {
                         method: "GET",
                         credentials: "include",

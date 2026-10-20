@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { X, Menu } from "lucide-react"
 import { UserRound } from "lucide-react"
 import { useRouter } from "next/navigation"
+import API_URL from "@/lib/api"
 
 
 export default function Navbar() {
@@ -19,7 +20,7 @@ export default function Navbar() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const response = await fetch("http://localhost:5001/api/auth/profile", {
+                const response = await fetch(`${API_URL}/api/auth/profile`, {
                     method: "GET",
                     credentials: "include",
                 })
@@ -48,7 +49,7 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:5001/api/auth/logout", {
+            const response = await fetch(`${API_URL}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             })

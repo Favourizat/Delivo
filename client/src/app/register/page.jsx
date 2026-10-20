@@ -3,6 +3,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import API_URL from "@/lib/api"
 
 export default function RegisterPage() {
     const [name, setName] = useState("")
@@ -15,7 +16,7 @@ export default function RegisterPage() {
         e.preventDefault()
 
         try {
-            const response = await fetch("http://localhost:5001/api/auth/register", {
+            const response = await fetch(`${API_URL}/api/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -55,7 +56,7 @@ export default function RegisterPage() {
                 <div className="text-center">
 
                     <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold-dark)]">
-                        Mare Vista
+                        Delivo
                     </p>
 
                     <h1 className="mt-3 font-display text-3xl text-[var(--navy)] md:text-4xl">
@@ -63,7 +64,7 @@ export default function RegisterPage() {
                     </h1>
 
                     <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-[var(--foreground)]/65">
-                        Create an account to make your stay at Mare Vista
+                        Create an account to make your stay at Delivo
                         simple and memorable.
                     </p>
 

@@ -4,6 +4,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import API_URL from "@/lib/api"
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -15,7 +16,7 @@ export default function LoginPage() {
     const handleLogout = async () => {
         try {
             const response = await fetch(
-                "http://localhost:5001/api/auth/logout",
+                `${API_URL}/api/auth/logout`,
                 {
                     method: "POST",
                     credentials: "include",
@@ -41,7 +42,7 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await fetch("http://localhost:5001/api/auth/login", {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

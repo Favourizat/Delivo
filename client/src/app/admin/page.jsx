@@ -2,6 +2,7 @@
 
 "use client"
 
+import API_URL from "@/lib/api"
 import { PackageCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -25,7 +26,7 @@ export default function AdminDashboard() {
         const fetchOrders = async () => {
             try {
                 // Fetch orders from the API(getAdminOrders)
-                const response = await fetch("http://localhost:5001/api/orders/admin/orders",
+                const response = await fetch(`${API_URL}/api/orders/admin/orders`,
                     {
                         method: "GET",
                         credentials: "include",
@@ -65,7 +66,7 @@ export default function AdminDashboard() {
                 throw new Error("Please enter a tracking location")
             }
             const response = await fetch(
-                `http://localhost:5001/api/tracking/orders/${selectedOrder.orderReference}/status`,
+                `${API_URL}/api/tracking/orders/${selectedOrder.orderReference}/status`,
                 {
                     method: "PUT",
                     credentials: "include",
@@ -112,7 +113,7 @@ export default function AdminDashboard() {
             if (!place.trim()) return
 
             const response = await fetch(
-                `http://localhost:5001/api/geocoding/lookup?place=${encodeURIComponent(place)}`
+                `${API_URL}/api/geocoding/lookup?place=${encodeURIComponent(place)}`
             )
 
             const data = await response.json()
