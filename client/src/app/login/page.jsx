@@ -80,7 +80,7 @@ export default function LoginPage() {
                 <div className="text-center">
 
                     <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold-dark)]">
-                        Mare Vista
+                        Delivo
                     </p>
 
                     <h1 className="mt-3 font-display text-3xl text-[var(--navy)] md:text-4xl">
@@ -89,7 +89,7 @@ export default function LoginPage() {
 
                     <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-[var(--foreground)]/65">
                         Sign in to manage your reservations and continue
-                        your Mare Vista experience.
+                        your Delivo Vista experience.
                     </p>
 
                 </div>
