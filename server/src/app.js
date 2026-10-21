@@ -10,21 +10,29 @@ import geocodingRoutes from "./routes/geocodingRoutes.js";
 
 const app = express();
 
+import cors from "cors";
+
 const allowedOrigins = [
-    "http://localhost:3000",
-    process.env.CLIENT_URL,
-].filter(Boolean);
+  "https://delivo-gamma.vercel.app",
+  "http://localhost:3000",
+];
 
-app.use(cors({
+app.use(
+  cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
+      // Allow requests without an Origin header, such as server-to-server requests.
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
-        return callback(new Error("Origin not allowed by CORS"));
+      return callback(new Error(`CORS blocked origin: ${origin}`));
     },
     credentials: true,
-}));
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -37,5 +45,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/tracking", trackingRoutes);
 app.use("/api/geocoding", geocodingRoutes);
+
 
 export default app;
