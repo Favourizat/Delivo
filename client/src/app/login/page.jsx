@@ -60,7 +60,7 @@ export default function LoginPage() {
                 console.error("Registration failed:", data.message)
                 return
             }
-
+            
             console.log("Login successful:", data)
             router.push("/")
         } catch (error) {

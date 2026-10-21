@@ -18,6 +18,7 @@ export default function Navbar() {
     const [authChecked, setAuthChecked] = useState(false)
 
     useEffect(() => {
+        
         const checkAuth = async () => {
             try {
                 const response = await fetch(`${API_URL}/api/auth/profile`, {
@@ -31,6 +32,8 @@ export default function Navbar() {
                 }
 
                 const data = await response.json()
+                console.log('user data',data);
+                
                 setUser(data.user ?? null)
             } catch (error) {
                 console.error("Authenticated check failed:", error)
@@ -46,6 +49,7 @@ export default function Navbar() {
     const closeMenu = () => {
         setIsOpen(false)
     }
+
 
     const handleLogout = async () => {
         try {
