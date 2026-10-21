@@ -34,11 +34,15 @@ const register = async (req, res) => {
             }
         })
 
+        // Generate Token
+        const token = generateToken(user.id, user.email, res)
+
         const { password: _, ...userWithoutPassword } = user
 
         return res.status(201).json({
             message: "User registered successfully!",
             user: userWithoutPassword,
+            token,
         })
 
     } catch (error) {
@@ -92,7 +96,7 @@ const login = async (req, res) => {
         return res.status(200).json({
             message: "Login successful",
             user: userWithoutPassword,
-            token
+            token,
         })
     } catch (error) {
         console.log("Login error:", error)
