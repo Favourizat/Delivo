@@ -50,7 +50,7 @@ export default function LoginPage() {
                 credentials: "include",
                 body: JSON.stringify({
                     email,
-                    password,
+                    password, 
                 })
             })
 

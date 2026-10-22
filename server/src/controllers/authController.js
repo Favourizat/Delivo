@@ -117,17 +117,18 @@ const logout = (req, res) => {
         message: "Logged out successfully",
     })
 }
+
 const profile = async (req, res) => {
-    const token = generateToken(user.id, user.email, res)
-    
     res.status(200).json({
         user: {
             id: req.user.id,
             email: req.user.email,
-            token
         },
-    })
-}
+    });
+};
+
+export default profile;
+
 
 
 export { register, login, logout, profile } 
