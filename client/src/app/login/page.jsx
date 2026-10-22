@@ -42,7 +42,7 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await fetch(`${API_URL}/api/auth/login`, {
+            const response = await fetch(`/api/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -50,144 +50,141 @@ export default function LoginPage() {
                 credentials: "include",
                 body: JSON.stringify({
                     email,
-                    password, 
+                    password,
                 })
             })
 
-            const data = await response.json()
+
+            const data = await response.json();
+
+            console.log('data',data);
+            
 
             if (!response.ok) {
-                console.error("Registration failed:", data.message)
+                // console.error("Login failed:", data.message)
+                console.error("Login failed");
                 return
             }
-            
+
             console.log("Login successful:", data)
+
+            window.dispatchEvent(new Event("authChange"))
+            router.refresh()
             router.push("/")
         } catch (error) {
             console.error("Login request failed:", error)
         }
     }
 
-    return (
-        <main className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-20">
+    
+return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-200 px-4 py-10">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-200">
+
+            {/* Heading */}
+            <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+                Login
+            </h2>
 
             <form
                 onSubmit={handleSubmit}
-                className="w-full max-w-md border border-[var(--border)] bg-[var(--white)] px-8 py-10 shadow-sm md:px-10"
+                className="w-full"
             >
+                {/* Email */}
+                <div className="mb-5">
+                    <label
+                        htmlFor="email"
+                        className="block text-gray-600 text-sm font-medium mb-1"
+                    >
+                        Email Address
+                    </label>
 
-                {/* Heading */}
-                <div className="text-center">
-
-                    <p className="text-xs uppercase tracking-[0.3em] text-[var(--gold-dark)]">
-                        Delivo
-                    </p>
-
-                    <h1 className="mt-3 font-display text-3xl text-[var(--navy)] md:text-4xl">
-                        Welcome Back
-                    </h1>
-
-                    <p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-[var(--foreground)]/65">
-                        Sign in to manage your reservations and continue
-                        your Delivo Vista experience.
-                    </p>
-
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={email}
+                        autoComplete="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400 transition"
+                    />
                 </div>
 
-                {/* Form Fields */}
-                <div className="mt-10 space-y-6">
+                {/* Password */}
+                <div className="mb-5">
+                    <label
+                        htmlFor="password"
+                        className="block text-gray-600 text-sm font-medium mb-1"
+                    >
+                        Password
+                    </label>
 
-                    {/* Email */}
-                    <div>
-                        <label
-                            htmlFor="email"
-                            className="mb-2 block text-xs font-medium uppercase tracking-[0.18em] text-[var(--navy)]"
-                        >
-                            Email Address
-                        </label>
-
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={email}
-                            autoComplete="off"
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email"
-                            className="w-full border border-[var(--border)] bg-transparent px-4 py-3 text-sm text-[var(--navy)] outline-none transition placeholder:text-[var(--foreground)]/40 focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]"
-                        />
-                    </div>
-
-                    {/* Password */}
-                    <div>
-                        <label
-                            htmlFor="password"
-                            className="mb-2 block text-xs font-medium uppercase tracking-[0.18em] text-[var(--navy)]"
-                        >
-                            Password
-                        </label>
-
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={password}
-                            autoComplete="off"
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            className="w-full border border-[var(--border)] bg-transparent px-4 py-3 text-sm text-[var(--navy)] outline-none transition placeholder:text-[var(--foreground)]/40 focus:border-[var(--gold)] focus:ring-1 focus:ring-[var(--gold)]"
-                        />
-                    </div>
-
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={password}
+                        autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        required
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 outline-none focus:border-blue-400 transition"
+                    />
                 </div>
 
                 {/* Login Button */}
                 <button
                     type="submit"
-                    className="mt-8 w-full bg-[var(--navy)] px-6 py-4 text-xs font-medium uppercase tracking-[0.22em] text-[var(--white)] transition duration-300 hover:bg-[var(--gold-dark)]"
+                    className="w-full bg-blue-600 text-white py-3 rounded-md font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 transition duration-200 cursor-pointer"
                 >
                     Sign In
                 </button>
 
-                <div className="my-8 flex items-center gap-4">
-                    <div className="h-px flex-1 bg-[var(--border)]" />
+                {/* Divider */}
+                <div className="my-6 flex items-center gap-4">
+                    <div className="h-px flex-1 bg-gray-300" />
 
-                    <span className="text-xs uppercase tracking-[0.18em] text-[var(--foreground)]/40">
+                    <span className="text-sm text-gray-400">
                         Or
                     </span>
 
-                    <div className="h-px flex-1 bg-[var(--border)]" />
+                    <div className="h-px flex-1 bg-gray-300" />
                 </div>
 
+                {/* Google Sign In */}
                 <button
                     type="button"
-                    className="flex w-full items-center justify-center gap-3 border border-[var(--border)] bg-transparent px-6 py-4 text-xs font-medium uppercase tracking-[0.18em] text-[var(--navy)] transition duration-300 hover:border-[var(--gold)] hover:bg-[var(--pale)] cursor-pointer"
+                    className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white text-gray-700 py-3 rounded-md font-medium hover:bg-gray-50 hover:border-gray-400 focus:ring-2 focus:ring-blue-200 transition duration-200 cursor-pointer"
                 >
-                    <span>
-                        Continue with Google
-                    </span>
+                    Continue with Google
                 </button>
 
                 {/* Register Link */}
-                <p className="mt-8 text-center text-sm text-[var(--foreground)]/65">
-                    Don't have an account?{" "}
+                <p className="mt-6 text-center text-sm text-gray-600">
+                    Don&apos;t have an account?{" "}
                     <a
                         href="/register"
-                        className="font-medium text-[var(--gold-dark)] transition hover:text-[var(--navy)]"
+                        className="font-medium text-blue-600 hover:text-blue-800 transition"
                     >
                         Create an account
                     </a>
-
-                    <a
-                        onClick={handleLogout}
-                        className="px-6 font-medium text-[var(--gold-dark)] transition hover:text-[var(--navy)] cursor-pointer"
-                    >
-                        Logout
-                    </a>
                 </p>
 
+                {/* Logout */}
+                <div className="mt-5 text-center border-t border-gray-200 pt-4">
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="text-sm text-gray-500 hover:text-blue-600 transition cursor-pointer"
+                    >
+                        Logout
+                    </button>
+                </div>
             </form>
+        </div>
+    </div>
+);
 
-        </main>
-    )
 }

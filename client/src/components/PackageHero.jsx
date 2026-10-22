@@ -16,11 +16,11 @@ export default function PackageHero() {
                 <div className="absolute inset-0 z-10 bg-black/60" />
 
                 <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-                    <h1 className="font-display text-sm font-bold text-[#f6a611] md:text-sm">
+                    <h1 className="font-display items-center text-xl font-bold text-[#f6a611] md:text-2xl">
                         BOOK A DELIVERY
                     </h1>
 
-                    <div className="mt-4 items-center gap-2 text-sm">
+                    {/* <div className="mt-4 items-center gap-2 text-sm">
                         <Link
                         className="text-white font-bold text-3xl md:text-4xl lg:text-5xl transition-colors duration-300 hover:text-[var(--gold)"
                         href="/">
@@ -32,7 +32,7 @@ export default function PackageHero() {
                             <br />
                             and let Delivo handle the rest.
                         </p>                        
-                    </div>
+                    </div> */}
                 </div>
         </section>
     )

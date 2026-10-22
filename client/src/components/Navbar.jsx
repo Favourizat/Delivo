@@ -18,7 +18,7 @@ export default function Navbar() {
     const [authChecked, setAuthChecked] = useState(false)
 
     useEffect(() => {
-
+        
         const checkAuth = async () => {
             try {
                 const response = await fetch(`${API_URL}/api/auth/profile`, {
@@ -30,21 +30,11 @@ export default function Navbar() {
                     setUser(null)
                     return
                 }
+                
 
-                 const data = await response.json()
-                console.log('user data', data);
-
-                // Inside your login submission handler upon success:
-                if (response.ok) {
-                    // 1. Dispatch custom event to notify the Navbar
-                    window.dispatchEvent(new Event("authChange"))
-
-                    // 2. Redirect to homepage or dashboard
-                    router.push("/")
-                }
-
-               
-
+                const data = await response.json()
+                console.log('user data',data);
+                
                 setUser(data.user ?? null)
             } catch (error) {
                 console.error("Authenticated check failed:", error)
@@ -75,6 +65,8 @@ export default function Navbar() {
 
             setProfileOpen(false)
             setIsOpen(false)
+            
+            router.refresh()
             router.push("/login")
         } catch (error) {
             console.error("Logout error:", error)
