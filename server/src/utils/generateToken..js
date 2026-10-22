@@ -1,7 +1,6 @@
-
 import jwt from "jsonwebtoken"
 
-export const generateToken = ( userId, email, res ) => {
+export const generateToken = (userId, email, res) => {
     const payload = {
         id: userId,
         email: email,
@@ -11,14 +10,20 @@ export const generateToken = ( userId, email, res ) => {
         payload, 
         process.env.JWT_SECRET, 
         {
-        expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-        })
+            expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+        }
+    )
 
-    res.cookie("jwt", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "None",maxAge: 7 * 24 * 60 * 60 * 1000, 
-        maxAge: (1000 * 60 * 60 * 27) * 7
-    })
+    const isProduction = process.env.NODE_ENV === "production"
+
+    // res.cookie("jwt", token, {
+    //     httpOnly: true,
+    //     // If in production, secure must be true. Locally on HTTP, it must be false.
+    //     secure: isProduction, 
+    //     // In production (cross-site), use "None". Locally (same-site/ports), use "lax".
+    //     sameSite: isProduction ? "None" : "lax", 
+    //     maxAge: (1000 * 60 * 60 * 24) * 7 // 7 days (cleaned up the duplicate maxAge)
+    // })
+
     return token
 }
