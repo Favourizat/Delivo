@@ -24,6 +24,5 @@ export const generateToken = (userId, email, res) => {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/",
     })
-
     return token
 }
