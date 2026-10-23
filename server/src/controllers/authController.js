@@ -35,7 +35,7 @@ const register = async (req, res) => {
         })
 
         // Generate Token
-        const token = generateToken(user.id, user.email, res)
+        generateToken(user.id, user.email, res)
 
         const { password: _, ...userWithoutPassword } = user
 
@@ -88,14 +88,13 @@ const login = async (req, res) => {
         }
 
         // Generate Token
-        const token = generateToken(user.id, user.email, res)
+        generateToken(user.id, user.email, res)
 
         const { password: _, ...userWithoutPassword } = user
 
         return res.status(200).json({
             message: "Login successful",
             user: userWithoutPassword,
-            token,
         })
     } catch (error) {
         console.log("Login error:", error)
@@ -119,14 +118,9 @@ const logout = (req, res) => {
 
 const profile = async (req, res) => {
     res.status(200).json({
-        user: {
-            id: req.user.id,
-            email: req.user.email,
-        },
+        user: req.user,
     });
 };
-
-export default profile;
 
 
 

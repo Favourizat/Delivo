@@ -2,16 +2,17 @@
 
 import jwt from "jsonwebtoken"
 
-export const authMiddleware = ( req, res, next ) => {
+export const authMiddleware = (req, res, next) => {
+
+    const token = req.cookies.jwt
+
+    if (!token) {
+        return res.status(401).json({
+            message: "Not authorized, no token",
+        })
+    }
+
     try {
-        const token = req.cookies.jwt
-
-        if(!token){
-            return res.status(401).json({
-                message: "Not authenticated",
-            })
-        }
-
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
@@ -19,8 +20,8 @@ export const authMiddleware = ( req, res, next ) => {
 
         req.user = decoded
 
-        next()
-    } catch (error){
+        return next()
+    } catch (error) {
         console.error("Authentication error:", error)
 
         return res.status(401).json({

@@ -14,16 +14,14 @@ export const generateToken = (userId, email, res) => {
         }
     )
 
-    const isProduction = process.env.NODE_ENV === "production"
-
-    // res.cookie("jwt", token, {
-    //     httpOnly: true,
-    //     // If in production, secure must be true. Locally on HTTP, it must be false.
-    //     secure: isProduction, 
-    //     // In production (cross-site), use "None". Locally (same-site/ports), use "lax".
-    //     sameSite: isProduction ? "None" : "lax", 
-    //     maxAge: (1000 * 60 * 60 * 24) * 7 // 7 days (cleaned up the duplicate maxAge)
-    // })
+    res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV = "production",
+        sameSite: process.env.NODE_ENV === "production", 
+        maxAge: (1000 * 60 * 60 * 24) * 7, // 7 days (cleaned up the duplicate maxAge)
+        path: "/",
+    })
 
     return token
 }
+
