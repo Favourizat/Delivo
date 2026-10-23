@@ -33,7 +33,7 @@ export default function RegisterPage() {
 
             if (!response.ok) {
                 console.error("Registration failed:", data.message)
-                return
+                throw new Error(data.message || "Registration failed")
             }
 
             console.log("Registration successful:", data)
