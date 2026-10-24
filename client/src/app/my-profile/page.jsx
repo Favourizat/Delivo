@@ -35,6 +35,7 @@ export default function MyProfilePage() {
                 const response = await fetch(
                     `${API_URL}/api/auth/profile`,
                     {
+                        method: "GET",
                         credentials: "include",
                     }
                 )

@@ -1,11 +1,11 @@
 
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 export const generateToken = (userId, email, res) => {
     const payload = {
         id: userId,
         email: email,
-    }
+    };
 
     const token = jwt.sign(
         payload,
@@ -13,9 +13,12 @@ export const generateToken = (userId, email, res) => {
         {
             expiresIn: process.env.JWT_EXPIRES_IN || "7d",
         }
-    )
+    );
 
-    const isProduction = process.env.NODE_ENV === "production"
+    const isProduction = process.env.NODE_ENV === "production";
+
+    console.log("Cookie environment:", process.env.NODE_ENV);
+    console.log("Is production:", isProduction);
 
     res.cookie("jwt", token, {
         httpOnly: true,
@@ -23,6 +26,7 @@ export const generateToken = (userId, email, res) => {
         sameSite: isProduction ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: "/",
-    })
-    return token
-}
+    });
+
+    return token;
+};
