@@ -26,7 +26,7 @@ export default function Navbar() {
                     headers: {
                         Accept: "application/json",
                     },
-                    cache: "no-store", // 👈 Fixed: added the hyphen
+        
                 })
 
                 if (!response.ok) {

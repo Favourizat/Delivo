@@ -11,8 +11,8 @@ import geocodingRoutes from "./routes/geocodingRoutes.js";
 const app = express();
 
 const allowedOrigins = [
-    "https://delivo-gamma.vercel.app",
     "http://localhost:3000",
+    "https://delivo-gamma.vercel.app",
 ];
 
 const corsOptions = {
