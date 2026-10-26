@@ -17,27 +17,32 @@ export default function Navbar() {
     const [user, setUser] = useState(null)
     const [authChecked, setAuthChecked] = useState(false)
 
-    useEffect(() => {
-        
+   useEffect(() => {
         const checkAuth = async () => {
             try {
                 const response = await fetch(`${API_URL}/api/auth/profile`, {
                     method: "GET",
                     credentials: "include",
+                    headers: {
+                        Accept: "application/json",
+                    },
+                    cache: "no-store", // 👈 Fixed: added the hyphen
                 })
 
                 if (!response.ok) {
                     setUser(null)
                     return
                 }
-                
 
                 const data = await response.json()
-                console.log('user data',data);
-                
-                setUser(data.user ?? null)
+                console.log('user data received:', data);
+
+                // 👈 Robust fallback: checks data.user first, then falls back to data directly
+                const userData = data.user ?? data ?? null;
+                setUser(userData);
+
             } catch (error) {
-                console.error("Authenticated check failed:", error)
+                console.error("Authentication check failed:", error)
                 setUser(null)
             } finally {
                 setAuthChecked(true)
