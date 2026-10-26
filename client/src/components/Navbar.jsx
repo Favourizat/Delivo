@@ -26,7 +26,6 @@ export default function Navbar() {
                     headers: {
                         Accept: "application/json",
                     },
-        
                 })
 
                 if (!response.ok) {
@@ -41,12 +40,12 @@ export default function Navbar() {
                 const userData = data.user ?? data ?? null;
                 setUser(userData);
 
-                setAuthChecked(true)
-
             } catch (error) {
                 console.error("Authentication check failed:", error)
                 setUser(null)
-            } 
+            } finally {
+                setAuthChecked(true)
+            }
         }
 
         checkAuth()
