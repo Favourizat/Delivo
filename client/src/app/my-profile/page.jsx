@@ -16,6 +16,7 @@ import { UserRound } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import API_URL from "@/lib/api"
+import { useSession } from "next-auth/react"
 
 
 export default function MyProfilePage() {
@@ -24,40 +25,18 @@ export default function MyProfilePage() {
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [user, setUser] = useState(null)
-    const [userloading, setUserloading] = useState(true)
+    
+    const { data: session, status } = useSession()
 
+    const user = session?.user ?? null
+    const userLoading = status === "loading"
 
 
     useEffect(() => {
-        const checkAuth = async () => {
-            try {
-                const response = await fetch(
-                    `${API_URL}/api/auth/profile`,
-                    {
-                        method: "GET",
-                        credentials: "include",
-                    }
-                )
-
-                if (!response.ok) {
-                    router.replace("/login")
-                    return
-                }
-
-                const data = await response.json()
-                setUser(data.user)
-            } catch (error) {
-                console.error("Authentication check failed:", error)
-                router.replace("/login")
-            } finally {
-                setUserloading(false)
-            }
+        if(status === "unauthenticated"){
+            router.replace("/login")
         }
-
-        checkAuth()
-    }, [router])
-
+    }, [status, router])
 
     useEffect(() => {
 
@@ -66,9 +45,10 @@ export default function MyProfilePage() {
         const fetchOrders = async () => {
             try {
                 const response = await fetch(
-                    `${API_URL}/api/orders/my-orders`,
+                    `/api/orders/my-orders`,
                     {
-                        credentials: "include",
+                        method: "GET",
+                        cache: "no-store",
                     }
                 )
 
@@ -124,7 +104,7 @@ export default function MyProfilePage() {
             .replace(/\b\w/g, (char) => char.toUpperCase())
     }
 
-    if (userloading) {
+    if (userLoading) {
         return <p className="p-6 text-center">Checking Login...</p>
     }
 

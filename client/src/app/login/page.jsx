@@ -4,7 +4,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import API_URL from "@/lib/api"
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -15,29 +15,29 @@ export default function LoginPage() {
     const router = useRouter()
 
 
-    const handleLogout = async () => {
-        try {
-            const response = await fetch(
-                `${API_URL}/api/auth/logout`,
-                {
-                    method: "POST",
-                    credentials: "include",
-                }
-            )
+    // const handleLogout = async () => {
+    //     try {
+    //         const response = await fetch(
+    //             `${API_URL}/api/auth/logout`,
+    //             {
+    //                 method: "POST",
+    //                 credentials: "include",
+    //             }
+    //         )
 
-            const data = await response.json()
+    //         const data = await response.json()
 
-            if (!response.ok) {
-                throw new Error(data.message || "Logout failed")
-            }
+    //         if (!response.ok) {
+    //             throw new Error(data.message || "Logout failed")
+    //         }
 
-            // Redirect to the login page
-            router.push("/")
+    //         // Redirect to the login page
+    //         router.push("/")
 
-        } catch (error) {
-            console.error("Logout error:", error)
-        }
-    }
+    //     } catch (error) {
+    //         console.error("Logout error:", error)
+    //     }
+    // }
 
 
     const handleSubmit = async (e) => {
@@ -46,44 +46,24 @@ export default function LoginPage() {
         setLoading(true)
         setError("")
 
-        try {
-
-            const API_URL = process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "")
-
-            const response = await fetch(
-                `${API_URL}/api/auth/login`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    email,
-                    password,
-                })
+        try{ 
+            const result = await signIn("credentials", {
+                email, 
+                password,
+                redirect: false,
             })
 
-
-            const data = await response.json();
-
-            console.log('data', data);
-
-
-            if (!response.ok) {
-                console.error("Login failed:", data.message)
-                throw new Error(data.message || "Login failed")
+            if(result?.error){
+                setError("Invalid email or password")
+                return
             }
 
-            console.log("Login successful:", data)
-
-            window.dispatchEvent(new Event("authChange"))
             router.refresh()
             router.push("/")
-        } catch (error) {
-            console.error("Login request failed:", error)
-            setError(error.message || "Something went wrong")
-        } finally {
+        } catch(error){
+            console.error("Login failed:", error)
+            setError("Something went wrong. Please try again")
+        } finally{
             setLoading(false)
         }
     }
@@ -192,7 +172,7 @@ export default function LoginPage() {
                     </p>
 
                     {/* Logout */}
-                    <div className="mt-5 text-center border-t border-gray-200 pt-4">
+                    {/* <div className="mt-5 text-center border-t border-gray-200 pt-4">
                         <button
                             type="button"
                             onClick={handleLogout}
@@ -200,7 +180,7 @@ export default function LoginPage() {
                         >
                             Logout
                         </button>
-                    </div>
+                    </div> */}
                 </form>
             </div>
         </div>

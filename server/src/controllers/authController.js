@@ -35,13 +35,15 @@ const register = async (req, res) => {
         })
 
         // Generate Token
-        generateToken(user.id, user.email, res)
+            const token = generateToken(user.id, user.email, res)
+        
 
         const { password: _, ...userWithoutPassword } = user
 
         return res.status(201).json({
             message: "User registered successfully!",
             user: userWithoutPassword,
+            token,
         })
 
     } catch (error) {
@@ -88,7 +90,9 @@ const login = async (req, res) => {
         }
 
         // Generate Token
-        generateToken(user.id, user.email, res)
+        if(user) {
+            generateToken(user.id, user.email, res)
+        }
 
         const { password: _, ...userWithoutPassword } = user
 
